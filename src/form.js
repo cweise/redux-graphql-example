@@ -1,20 +1,13 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
-import { doQuery } from "./actions";
 
-const query = `
-  query {
-    continents {
-      name
-    }
-  }
-`;
+import { request } from "./actions";
+import { query } from "./continents";
 
 const Form = () => {
   const dispatch = useDispatch();
 
-  const handleClick = () => dispatch(doQuery(query));
+  const handleClick = () => dispatch(request(query));
 
   return <button onClick={handleClick}>Update</button>;
 };

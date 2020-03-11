@@ -1,12 +1,10 @@
-import { combineReducers } from "redux";
-
-import { QUERY_SUCCESS, QUERY_START } from "./action-types";
+import { REQUEST_SUCCESS, REQUEST_START, REQUEST_ERROR } from "./action-types";
 
 const defaultState = {};
 
-const graphqlReducer = (state = defaultState, { type, payload }) => {
+const reducer = (state = defaultState, { type, payload }) => {
   switch (type) {
-    case QUERY_START:
+    case REQUEST_START:
       return {
         ...state,
         [payload.hash]: {
@@ -14,7 +12,7 @@ const graphqlReducer = (state = defaultState, { type, payload }) => {
           isFetching: true
         }
       };
-    case QUERY_SUCCESS:
+    case REQUEST_SUCCESS:
       return {
         ...state,
         [payload.hash]: {
@@ -23,14 +21,18 @@ const graphqlReducer = (state = defaultState, { type, payload }) => {
           isFetching: false
         }
       };
-
+    case REQUEST_ERROR:
+      return {
+        ...state,
+        [payload.hash]: {
+          ...state[payload.hash],
+          error: payload.error,
+          isFetching: false
+        }
+      };
     default:
       return state;
   }
 };
-
-const reducer = combineReducers({
-  graphql: graphqlReducer
-});
 
 export default reducer;

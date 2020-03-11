@@ -1,3 +1,3 @@
-export const QUERY_START = "QUERY_START";
-export const QUERY_SUCCESS = "QUERY_SUCCESS";
-export const QUERY_ERROR = "QUERY_ERROR";
+export const REQUEST_START = "REQUEST_START";
+export const REQUEST_SUCCESS = "REQUEST_SUCCESS";
+export const REQUEST_ERROR = "REQUEST_ERROR";

@@ -1,38 +1,39 @@
-import { QUERY_START, QUERY_SUCCESS, QUERY_ERROR } from "./action-types";
+import { REQUEST_START, REQUEST_SUCCESS, REQUEST_ERROR } from "./action-types";
 import { createHash } from "./utils";
+import { print } from "graphql/language/printer";
 
-const queryStart = payload => ({
-  type: QUERY_START,
+const requestStart = payload => ({
+  type: REQUEST_START,
   payload
 });
 
-const querySuccess = payload => ({
-  type: QUERY_SUCCESS,
+const requestSuccess = payload => ({
+  type: REQUEST_SUCCESS,
   payload
 });
 
-const queryError = payload => ({
-  type: QUERY_ERROR,
+const requestError = payload => ({
+  type: REQUEST_ERROR,
   payload
 });
 
-export const doQuery = query => async dispatch => {
+export const request = query => async dispatch => {
   const queryHash = createHash(query);
 
-  dispatch(queryStart({ hash: queryHash }));
+  dispatch(requestStart({ hash: queryHash }));
 
   fetch("https://countries.trevorblades.com", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ query })
+    body: JSON.stringify({ query: print(query) })
   })
     .then(result => result.json())
     .then(result => {
-      dispatch(querySuccess({ hash: queryHash, data: result.data }));
+      dispatch(requestSuccess({ hash: queryHash, data: result.data }));
     })
     .catch(err => {
-      dispatch(queryError({ hash: queryHash, error: err }));
+      dispatch(requestError({ hash: queryHash, error: err }));
     });
 };

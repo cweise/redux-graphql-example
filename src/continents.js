@@ -1,27 +1,33 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import gql from "graphql-tag";
 
-import { doQuery } from "./actions";
-import { querySelector } from "./selectors";
+import { request } from "./actions";
+import { select } from "./selectors";
 
-const query = `
+export const query = gql`
   query {
     continents {
       name
+      code
     }
   }
 `;
 
 const Continents = () => {
   const dispatch = useDispatch();
-  const { data, isFetching } = useSelector(querySelector(query));
+  const { data, isFetching } = useSelector(select(query));
 
   useEffect(() => {
-    dispatch(doQuery(query));
+    dispatch(request(query));
   }, []);
 
   if (isFetching) {
     return "is fetching";
+  }
+
+  if (!data) {
+    return null;
   }
 
   return (
